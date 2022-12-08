@@ -6,6 +6,7 @@ const { checkUsernameExists, validateRoleName } = require('./auth-middleware');
 const Users = require('../users/users-model');
 const { JWT_SECRET, BCRYPT_ROUNDS } = require("../secrets");
 
+
 router.post("/register", validateRoleName, async (req, res, next) => {
   try {
     const {username, password, role_name} = req.body;

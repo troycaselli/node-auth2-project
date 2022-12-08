@@ -39,23 +39,25 @@ const checkUsernameExists = async (req, res, next) => {
     } else {
       next({status: 401, message: 'Invalid credentials'});
     }
-
   } catch (err) {
     next(err);
   }
-
-  /*
-    If the username in req.body does NOT exist in the database
-    status 401
-    {
-      "message": "Invalid credentials"
-    }
-  */
 }
 
 
 const validateRoleName = (req, res, next) => {
-  next()
+  const {role_name} = req.body;
+  if(!role_name || !role_name.trim()) {
+    req.body.role_name = 'student';
+    next();
+  } else if(role_name.trim() === 'admin') {
+    next({status: 422, message: 'Role name can not be admin'});
+  } else if(role_name.trim().length > 32) {
+    next({status: 422, message: 'Role name can not be longer than 32 chars'});
+  } else {
+    next();
+  }
+
   /*
     If the role_name in the body is valid, set req.role_name to be the trimmed string and proceed.
 
