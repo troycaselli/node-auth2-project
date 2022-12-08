@@ -32,9 +32,16 @@ router.post("/register", validateRoleName, async (req, res, next) => {
 
 router.post("/login", checkUsernameExists, async (req, res, next) => {
   try {
-    
+    const {username, password} = req.body;
+    const users = await Users.findBy({username});
+    if(users.length && bcryptjs.compareSync(password, users[0].password)) {
+      const token = generateToken(users[0]);
+      res.status(200).json({message: `${username} is back!`, token});
+    } else {
+      res.status(401).json({message: 'Invalid credentials'});
+    }
   } catch (err) {
-
+    next(err);
   }
 
   /**
