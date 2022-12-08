@@ -123,3 +123,6 @@ dist
 
 # testing db
 testing.db3
+
+# db
+auth.db3
