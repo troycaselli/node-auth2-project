@@ -31,13 +31,13 @@ router.post("/register", validateRoleName, async (req, res, next) => {
 });
 
 
-router.post("/login", checkUsernameExists, (req, res) => {
+router.post("/login", checkUsernameExists, (req, res, next) => {
     const {username, password} = req.body;
     if(bcryptjs.compareSync(password, req.user.password)) {
       const token = generateToken(req.user);
       res.status(200).json({message: `${username} is back!`, token});
     } else {
-      res.status(401).json({message: 'Invalid credentials'});
+      next({status: 401, message: 'Invalid credentials'});
     }
 
   /**
